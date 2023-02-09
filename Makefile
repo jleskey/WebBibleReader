@@ -12,7 +12,7 @@
 # and open the bibleajax.html link.
 
 # TO DO: Must replace "username" by your username
-USER= username
+USER= josleskey
 
 # Use GNU C++ compiler with C++11 standard
 CC= g++
