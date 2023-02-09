@@ -34,7 +34,7 @@ using namespace cgicc;
 
 Cgicc cgi;  // create object used to access CGI request data
 
-bool evaluateInput(form_iterator input, string type, int maxValue, int &targetVar);
+bool evaluateInput(form_iterator input, string type, int &targetVar);
 
 int main() {
   /* A CGI program must send a response header with content type
@@ -62,10 +62,10 @@ int main() {
   form_iterator verse = cgi.getElement("verse");
   form_iterator nv = cgi.getElement("num_verse");
 
-  evaluateInput(book, "book", 150, b);
-  evaluateInput(chapter, "chapter", 150, c);
-  evaluateInput(verse, "verse", 150, v);
-  evaluateInput(nv, "#", 0, n);
+  evaluateInput(book, "book", b);
+  evaluateInput(chapter, "chapter", c);
+  evaluateInput(verse, "verse", v);
+  evaluateInput(nv, "#", n);
 
   // Create a reference from the numbers
   Ref ref(b, c, v);
@@ -86,21 +86,12 @@ int main() {
   }
 }
 
-bool evaluateInput(form_iterator input, string type, int maxValue, int &targetVar) {
+bool evaluateInput(form_iterator input, string type, int &targetVar) {
   bool validInput = false;
   if (input != cgi.getElements().end()) {
    int number = input->getIntegerValue();
-   if (number > maxValue && maxValue != 0) {
-     cout << "<p>The " << type << " number (" << number << ") is too high.</p>" << endl;
-   }
-   else if (number <= 0) {
-     cout << "<p>The " << type << " must be a positive number.</p>" << endl;
-   }
-   else {
-    validInput = true;
-    targetVar = number;
-   }
+   validInput = true;
+   targetVar = number;
   }
-
   return validInput;
 }
