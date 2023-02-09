@@ -8,3 +8,4 @@ if [[ "$1" == "" ]]; then
     ./deploy.sh
 else
     ./changemessage "$1"
+fi
