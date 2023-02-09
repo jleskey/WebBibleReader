@@ -34,7 +34,7 @@ using namespace cgicc;
 
 Cgicc cgi;  // create object used to access CGI request data
 
-bool evaluateInput(form_iterator input, string type, int &targetVar);
+bool evaluateInput(form_iterator input, int &targetVar);
 
 int main() {
   /* A CGI program must send a response header with content type
@@ -62,10 +62,10 @@ int main() {
   form_iterator verse = cgi.getElement("verse");
   form_iterator nv = cgi.getElement("num_verse");
 
-  evaluateInput(book, "book", b);
-  evaluateInput(chapter, "chapter", c);
-  evaluateInput(verse, "verse", v);
-  evaluateInput(nv, "#", n);
+  evaluateInput(book, b);
+  evaluateInput(chapter, c);
+  evaluateInput(verse, v);
+  evaluateInput(nv, n);
 
   // Create a reference from the numbers
   Ref ref(b, c, v);
@@ -86,7 +86,7 @@ int main() {
   }
 }
 
-bool evaluateInput(form_iterator input, string type, int &targetVar) {
+bool evaluateInput(form_iterator input, int &targetVar) {
   bool validInput = false;
   if (input != cgi.getElements().end()) {
    int number = input->getIntegerValue();
