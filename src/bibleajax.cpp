@@ -80,7 +80,7 @@ int main() {
       else outVerse.displayFlowing(false);
     }
     else if (result != REACHED_END) {
-      cerr << webBible.error(result) << endl;
+      cout << webBible.error(result) << endl;
       exit(2);
     }
   }
