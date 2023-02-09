@@ -45,12 +45,12 @@ int main() {
   cout << "Content-Type: text/html\n\n";
 
   // Connect to the Bible text file
-	Bible webBible("/home/class/csc3004/Bibles/web-complete");
+  Bible webBible("/home/class/csc3004/Bibles/web-complete");
 
   // Bible content variables
-	int b = 0, c = 0, v = 0, n = 1;
+  int b = 0, c = 0, v = 0, n = 1;
   Verse outVerse;
-	LookupResult result;
+  LookupResult result;
   bool validInput = true;
 
   // GET THE INPUT DATA
@@ -66,36 +66,36 @@ int main() {
   evaluateInput(chapter, "chapter", 150, c);
   evaluateInput(verse, "verse", 150, v);
 
-	// Create a reference from the numbers
-	Ref ref(b, c, v);
+  // Create a reference from the numbers
+  Ref ref(b, c, v);
 
-	for (int i = 0; i < n && result != REACHED_END; i++) {
-		if (i == 0)
-			outVerse = webBible.lookup(ref, result);
-		else
-			outVerse = webBible.nextVerse(result);
-		if (result == SUCCESS) {
-			if (i == 0) outVerse.displayFlowing(true);
-			else outVerse.displayFlowing(false);
-		}
-		else if (result != REACHED_END) {
-			cerr << webBible.error(result) << endl;
-			exit(2);
-		}
-	}
+  for (int i = 0; i < n && result != REACHED_END; i++) {
+    if (i == 0)
+      outVerse = webBible.lookup(ref, result);
+    else
+      outVerse = webBible.nextVerse(result);
+    if (result == SUCCESS) {
+      if (i == 0) outVerse.displayFlowing(true);
+      else outVerse.displayFlowing(false);
+    }
+    else if (result != REACHED_END) {
+      cerr << webBible.error(result) << endl;
+      exit(2);
+    }
+  }
 }
 
 bool evaluateInput(form_iterator input, string type, int maxValue, int &targetVar) {
   bool validInput = false;
   if (input != cgi.getElements().end()) {
-	 int number = input->getIntegerValue();
-	 if (number > maxValue) {
-		 cout << "<p>The " << type << " number (" << number << ") is too high.</p>" << endl;
-	 }
-	 else if (number <= 0) {
-		 cout << "<p>The " << type << " must be a positive number.</p>" << endl;
-	 }
-	 else {
+   int number = input->getIntegerValue();
+   if (number > maxValue) {
+     cout << "<p>The " << type << " number (" << number << ") is too high.</p>" << endl;
+   }
+   else if (number <= 0) {
+     cout << "<p>The " << type << " must be a positive number.</p>" << endl;
+   }
+   else {
     validInput = true;
     targetVar = number;
    }
