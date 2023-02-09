@@ -62,9 +62,9 @@ int main() {
   form_iterator verse = cgi.getElement("verse");
   form_iterator nv = cgi.getElement("num_verse");
 
-  validInput = evaluateInput(book, "book", 150, b);
-  validInput = evaluateInput(chapter, "chapter", 150, c);
-  validInput = evaluateInput(verse, "verse", 150, v);
+  evaluateInput(book, "book", 150, b);
+  evaluateInput(chapter, "chapter", 150, c);
+  evaluateInput(verse, "verse", 150, v);
 
 	// Create a reference from the numbers
 	Ref ref(b, c, v);
