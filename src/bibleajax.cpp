@@ -21,6 +21,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include "Ref.h"
+#include "Verse.h"
+#include "Bible.h"
 using namespace std;
 
 /* Required libraries for AJAX to function */
@@ -29,15 +32,26 @@ using namespace std;
 #include "/home/class/csc3004/cgicc/HTMLClasses.h"
 using namespace cgicc;
 
+Cgicc cgi;  // create object used to access CGI request data
+
+bool evaluateInput(form_iterator input, string type, int maxValue, int &targetVar);
+
 int main() {
   /* A CGI program must send a response header with content type
    * back to the web client before any other output.
    * For an AJAX request, our response is not a complete HTML document,
    * so the response type is just plain text to insert into the web page.
    */
-  cout << "Content-Type: text/plain\n\n";
-  
-  Cgicc cgi;  // create object used to access CGI request data
+  cout << "Content-Type: text/html\n\n";
+
+  // Connect to the Bible text file
+	Bible webBible("/home/class/csc3004/Bibles/web-complete");
+
+  // Bible content variables
+	int b = 0, c = 0, v = 0, n = 1;
+  Verse outVerse;
+	LookupResult result;
+  bool validInput = true;
 
   // GET THE INPUT DATA
   // browser sends us a string of field name/value pairs from HTML form
@@ -48,41 +62,44 @@ int main() {
   form_iterator verse = cgi.getElement("verse");
   form_iterator nv = cgi.getElement("num_verse");
 
-  // Convert and check input data
+  validInput = evaluateInput(book, "book", 150, b);
+  validInput = evaluateInput(chapter, "chapter", 150, c);
+  validInput = evaluateInput(verse, "verse", 150, v);
+
+	// Create a reference from the numbers
+	Ref ref(b, c, v);
+
+	for (int i = 0; i < n && result != REACHED_END; i++) {
+		if (i == 0)
+			outVerse = webBible.lookup(ref, result);
+		else
+			outVerse = webBible.nextVerse(result);
+		if (result == SUCCESS) {
+			if (i == 0) outVerse.displayFlowing(true);
+			else outVerse.displayFlowing(false);
+		}
+		else if (result != REACHED_END) {
+			cerr << webBible.error(result) << endl;
+			exit(2);
+		}
+	}
+}
+
+bool evaluateInput(form_iterator input, string type, int maxValue, int &targetVar) {
   bool validInput = false;
-  if (chapter != cgi.getElements().end()) {
-	 int chapterNum = chapter->getIntegerValue();
-	 if (chapterNum > 150) {
-		 cout << "<p>The chapter number (" << chapterNum << ") is too high.</p>" << endl;
+  if (input != cgi.getElements().end()) {
+	 int number = input->getIntegerValue();
+	 if (number > maxValue) {
+		 cout << "<p>The " << type << " number (" << number << ") is too high.</p>" << endl;
 	 }
-	 else if (chapterNum <= 0) {
-		 cout << "<p>The chapter must be a positive number.</p>" << endl;
+	 else if (number <= 0) {
+		 cout << "<p>The " << type << " must be a positive number.</p>" << endl;
 	 }
-	 else
-		 validInput = true;
+	 else {
+    validInput = true;
+    targetVar = number;
+   }
   }
-  
-  /* TO DO: OTHER INPUT VALUE CHECKS ARE NEEDED ... but that's up to you! */
 
-  /* TO DO: PUT CODE HERE TO CALL YOUR BIBLE CLASS FUNCTIONS
-   *        TO LOOK UP THE REQUESTED VERSES
-   */
-
-  /* SEND BACK THE RESULTS
-   * Finally we send the result back to the client on the standard output stream
-   * in HTML text format.
-   * This string will be inserted as is inside a container on the web page, 
-   * so we must include HTML formatting commands to make things look presentable!
-   */
-  if (validInput) {
-	cout << "Search Type: <b>" << **st << "</b>" << endl;
-	cout << "<p>Your result: "
-		 << **book << " " << **chapter << ":" << **verse 
-		 << "<em> The " << **nv
-		 << " actual verse(s) retreived from the server should go here!</em></p>" << endl;
-  }
-  else {
-	  cout << "<p>Invalid Input: <em>report the more specific problem.</em></p>" << endl;
-  }
-  return 0;
+  return validInput;
 }

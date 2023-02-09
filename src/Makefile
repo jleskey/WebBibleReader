@@ -11,7 +11,6 @@
 # To test the program, go to http://cs.mvnu.edu/class/csc3004/USER/
 # and open the bibleajax.html link.
 
-# TO DO: Must replace "username" by your username
 USER= josleskey
 
 # Use GNU C++ compiler with C++11 standard
@@ -20,18 +19,25 @@ CFLAGS= -g -std=c++11
 
 all:	bibleajax.cgi PutCGI PutHTML
 
-# TO DO: For bibleajax.cgi, add dependencies to include
-# compiled classes from Project 1 to be linked into the executable program
-bibleajax.cgi:	bibleajax.o
-		$(CC) $(CFLAGS) -o bibleajax.cgi bibleajax.o -lcgicc
+# Ref Object
+Ref.o : Ref.h Ref.cpp
+	$(CC) $(CFLAGS) -c Ref.cpp
+
+# Verse Object
+Verse.o : Ref.h Verse.h Verse.cpp
+	$(CC) $(CFLAGS) -c Verse.cpp
+
+# Bible Object
+Bible.o : Ref.h Verse.h Bible.h Bible.cpp
+	$(CC) $(CFLAGS) -c Bible.cpp
+
+bibleajax.cgi:	Ref.o Verse.o Bible.o bibleajax.o
+		$(CC) $(CFLAGS) -o bibleajax.cgi Ref.o Verse.o Bible.o bibleajax.o -lcgicc
 		# -l option is necessary to link with cgicc library
 
 # main program to handle AJAX/CGI requests for Bible references
 bibleajax.o:	bibleajax.cpp
 		$(CC) $(CFLAGS) -c bibleajax.cpp
-
-# TO DO: copy targets to build classes from Project 1:
-# Bible.o, Ref.o, Verse.o
 			
 PutCGI:	bibleajax.cgi
 		chmod 755 bibleajax.cgi
