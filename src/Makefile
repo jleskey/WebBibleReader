@@ -17,7 +17,7 @@ USER= josleskey
 CC= g++
 CFLAGS= -g -std=c++11
 
-all:	bibleajax.cgi PutCGI PutHTML
+all:	bibleajax.cgi PutCGI PutStatic
 
 # Ref Object
 Ref.o : Ref.h Ref.cpp
@@ -46,8 +46,8 @@ PutCGI:	bibleajax.cgi
 		echo "Current contents of your cgi-bin directory: "
 		ls -l /var/www/html/class/csc3004/$(USER)/cgi-bin/
 
-PutHTML:
-		cp bibleajax.html /var/www/html/class/csc3004/$(USER)
+PutStatic:
+		cp bibleajax.html bibleajax.css /var/www/html/class/csc3004/$(USER)
 
 		echo "Current contents of your HTML directory: "
 		ls -l /var/www/html/class/csc3004/$(USER)

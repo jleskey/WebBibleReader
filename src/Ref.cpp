@@ -91,9 +91,9 @@ void Ref::display() { 	// Display Reference
 }
 
 void Ref::displayHeader() { // Display book name and chapter name
-  cout << GetBookName(book) << " " << chap;
+  cout << "<h2>" << GetBookName(book) << " " << chap << "</h2>";
 }
 
 void Ref::displayMarker() { 	// Display verse number
-      cout << verse;
+  cout << "<span class=\"verse_number\">" << verse << "</span>";
 }
