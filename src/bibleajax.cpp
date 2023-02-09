@@ -65,6 +65,7 @@ int main() {
   evaluateInput(book, "book", 150, b);
   evaluateInput(chapter, "chapter", 150, c);
   evaluateInput(verse, "verse", 150, v);
+  evaluateInput(nv, "#", 0, n);
 
   // Create a reference from the numbers
   Ref ref(b, c, v);
@@ -89,7 +90,7 @@ bool evaluateInput(form_iterator input, string type, int maxValue, int &targetVa
   bool validInput = false;
   if (input != cgi.getElements().end()) {
    int number = input->getIntegerValue();
-   if (number > maxValue) {
+   if (number > maxValue && maxValue != 0) {
      cout << "<p>The " << type << " number (" << number << ") is too high.</p>" << endl;
    }
    else if (number <= 0) {
