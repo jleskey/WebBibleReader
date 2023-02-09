@@ -4,4 +4,7 @@ git reset --soft HEAD~
 git add -A
 git commit -C ORIG_HEAD
 
-./deploy.sh
+if [[ "$1" == "" ]]; then
+    ./deploy.sh
+else
+    ./changemessage "$1"
