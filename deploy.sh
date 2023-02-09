@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 cd "$(realpath `dirname "$0"`)"
 
 git push -f

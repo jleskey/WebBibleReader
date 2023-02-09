@@ -1,5 +1,3 @@
-#!/usr/bin/env zsh
-
 cd "$(realpath `dirname "$0"`)"
 
 git reset --soft HEAD~
