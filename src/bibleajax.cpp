@@ -65,7 +65,9 @@ int main() {
   evaluateInput(book, b);
   evaluateInput(chapter, c);
   evaluateInput(verse, v);
+  cout << n << endl;
   evaluateInput(nv, n);
+  cout << n << endl;
 
   // Create a reference from the numbers
   Ref ref(b, c, v);

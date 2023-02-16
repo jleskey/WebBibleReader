@@ -1,5 +1,30 @@
+body {
+    margin: 0 2em;
+}
+
+#response_area {
+    text-align: justify;
+}
+
+h2 {
+    text-align: center;
+    font-weight: normal;
+}
+
 .verse_number {
     font-size: .83em;
     vertical-align: super;
     color: #1f3d97;
+}
+
+@media only screen and (min-width: 600px) {
+    body {
+        margin: 0 50px;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    body {
+        margin: 0 250px;
+    }
 }
