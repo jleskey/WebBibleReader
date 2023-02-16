@@ -75,7 +75,7 @@ Verse Bible::nextVerse(LookupResult& status) {
 string Bible::error(LookupResult status) {
 	ostringstream out;
 
-	out << "Error: ";
+	//out << "Error: ";
 
 	if (status == SUCCESS)
 		out << "There is no error";
