@@ -34,7 +34,9 @@ using namespace cgicc;
 
 Cgicc cgi;  // create object used to access CGI request data
 
-bool evaluateInput(form_iterator input, int &targetVar);
+bool evaluateIntInput(form_iterator input, int &targetVar);
+bool evaluateStringInput(form_iterator input, string &targetVar);
+Bible connectBible(string version);
 
 int main() {
   /* A CGI program must send a response header with content type
@@ -44,11 +46,10 @@ int main() {
    */
   cout << "Content-Type: text/html\n\n";
 
-  // Connect to the Bible text file
-  Bible webBible("/home/class/csc3004/Bibles/web-complete");
-
   // Bible content variables
+  string bv;
   int b = 0, c = 0, v = 0, n = 1;
+  Bible theBible;
   Verse outVerse;
   LookupResult result;
   bool validInput = true;
@@ -57,36 +58,41 @@ int main() {
   // browser sends us a string of field name/value pairs from HTML form
   // retrieve the value for each appropriate field name
   form_iterator st = cgi.getElement("search_type");
+  form_iterator version = cgi.getElement("version");
   form_iterator book = cgi.getElement("book");
   form_iterator chapter = cgi.getElement("chapter");
   form_iterator verse = cgi.getElement("verse");
   form_iterator nv = cgi.getElement("num_verse");
 
-  evaluateInput(book, b);
-  evaluateInput(chapter, c);
-  evaluateInput(verse, v);
-  evaluateInput(nv, n);
+  evaluateStringInput(version, bv);
+  evaluateIntInput(book, b);
+  evaluateIntInput(chapter, c);
+  evaluateIntInput(verse, v);
+  evaluateIntInput(nv, n);
+
+  // Connect to the Bible text file
+  theBible = connectBible(bv);
 
   // Create a reference from the numbers
   Ref ref(b, c, v);
 
   for (int i = 0; i < n && result != REACHED_END; i++) {
     if (i == 0)
-      outVerse = webBible.lookup(ref, result);
+      outVerse = theBible.lookup(ref, result);
     else
-      outVerse = webBible.nextVerse(result);
+      outVerse = theBible.nextVerse(result);
     if (result == SUCCESS) {
       if (i == 0) outVerse.displayFlowing(true);
       else outVerse.displayFlowing(false);
     }
     else if (result != REACHED_END) {
-      cout << webBible.error(result) << endl;
+      cout << theBible.error(result) << endl;
       exit(2);
     }
   }
 }
 
-bool evaluateInput(form_iterator input, int &targetVar) {
+bool evaluateIntInput(form_iterator input, int &targetVar) {
   if (input != cgi.getElements().end()) {
     string text = input->getStrippedValue();
     if (text != "") {
@@ -96,4 +102,23 @@ bool evaluateInput(form_iterator input, int &targetVar) {
     }
   }
   return false;
+}
+
+bool evaluateStringInput(form_iterator input, string &targetVar) {
+  if (input != cgi.getElements().end()) {
+    string text = input->getValue();
+    targetVar = text;
+    return true;
+  }
+  return false;
+}
+
+Bible connectBible(string version) {
+  string path = "/home/class/csc3004/Bibles/";
+  if (version == "kjv" || version == "dby" || version == "vlt" || version == "webster")
+    path.append(version);
+  else
+    path.append("web");
+  path.append("-complete");
+  return Bible(path);
 }

@@ -57,6 +57,7 @@ function getresponse () {
 	// NOTE: This page must be loaded from cs.mvnu.edu to avoid a cross-origin request violation.
 	XMLHttp.open("GET", "/class/csc3004/josleskey/cgi-bin/bibleajax.cgi?"
 		+ "search_type=" + searchType.value
+		+ "&version=" + document.getElementById('version').value
 		+ "&book=" + document.getElementById('book').value
 		+ "&chapter=" + document.getElementById('chapter').value
 		+ "&verse=" + document.getElementById('verse').value
@@ -91,6 +92,18 @@ function getresponse () {
 
 <hr>
 <table>
+	<tr>
+		<td style="text-align: right; vertical-align: top;">Version</td>
+		<td style="text-align: left; vertical-align: top;">
+			<select name="version" id="version">
+				<option value="web">World English Bible (2000)</option>
+				<option value="kjv">King James Version (1769)</option>
+				<option value="dby">Darby Translation (1890)</option>
+				<option value="vlt">Young's Literal Translation (1862)</option>
+				<option value="webster">Webster Translation (1833)</option>
+			</select>
+		</td>
+	</tr>
 <tr>
 <td align=right valign=top>Book</td>
 <td align=left valign=top>
