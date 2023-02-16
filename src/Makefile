@@ -17,7 +17,7 @@ USER= josleskey
 CC= g++
 CFLAGS= -g -std=c++11
 
-all:	bibleajax.cgi PutCGI PutStatic
+all:	bibleajax.cgi# PutCGI PutStatic
 
 # Ref Object
 Ref.o : Ref.h Ref.cpp
