@@ -31,7 +31,7 @@ class Verse {
    void display(); // Display ref & verse [with line breaks in needed].
         // the reference should be displayed by calling verseref.display().
    void displayFlowing(bool startsPassage); // Display ref & verse, formatted for flowing passages.
-   void displayInline(); // Display ref & verse inline
+   void displayFullInline(); // Display full ref & verse inline
 };
 
 #endif //Verse_H

@@ -45,7 +45,7 @@ void Verse::display() {
  }
 
  // display reference and verse inline
-void Verse::displayInline() {
+void Verse::displayFullInline() {
     verseRef.display();
     cout << " " << verseText;
  }

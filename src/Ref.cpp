@@ -84,7 +84,11 @@ bool Ref::operator<=(const Ref r) {
   return *this < r || *this == r;
 }
 
-void Ref::display() { 	// Display Reference
+void Ref::display() { // Display reference with basic formatting
+  cout << GetBookName(book) << " " << chap << ":" << verse;
+}
+
+void Ref::displayFlowing() { 	// Display Reference in flowing format
   displayHeader();
   cout << ":";
   displayMarker();

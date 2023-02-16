@@ -51,7 +51,8 @@ public:
    bool operator<(const Ref);
    bool operator<=(const Ref);
 
-   void display(); // Print reference
+   void display(); // Print reference with basic formatting
+   void displayFlowing(); // Print reference in flowing format
    void displayHeader(); // Display book name and chapter number
    void displayMarker(); // Display verse number
 };
