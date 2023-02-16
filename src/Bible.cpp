@@ -37,9 +37,9 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
 		}
 	} while (lastValidRef < ref && status == SUCCESS);
 
-	if (ref.getBook() == 0 || lastValidRef.getBook() < ref.getBook())
+	if (ref.getBook() == 0 || lastValidRef.getBook() < ref.getBook() && (ref.getChap() != 0 || ref.getVerse() != 0))
 		status = NO_BOOK;
-	else if (ref.getChap() == 0 || lastValidRef.getBook() == ref.getBook() && lastValidRef.getChap() < ref.getChap())
+	else if (ref.getChap() == 0 || lastValidRef.getBook() == ref.getBook() && lastValidRef.getChap() < ref.getChap() && ref.getVerse() != 0)
 		status = NO_CHAPTER;
 	else if (ref.getVerse() == 0 || lastValidRef.getBook() == ref.getBook() && lastValidRef.getChap() == ref.getChap() && lastValidRef.getVerse() < ref.getVerse())
 		status = NO_VERSE;
