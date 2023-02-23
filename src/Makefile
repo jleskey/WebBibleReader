@@ -35,6 +35,13 @@ bibleajax.cgi:	Ref.o Verse.o Bible.o bibleajax.o
 		$(CC) $(CFLAGS) -o bibleajax.cgi Ref.o Verse.o Bible.o bibleajax.o -lcgicc
 		# -l option is necessary to link with cgicc library
 
+# auxillary program to test reference index
+testreader.o: Ref.o Verse.o Bible.of
+	$(CC) $(CFLAGS) -c testreader.cpp
+
+testreader: testreader.o
+	$(CC) $(CFLAGS) -o testreader testreader.o
+
 # main program to handle AJAX/CGI requests for Bible references
 bibleajax.o:	bibleajax.cpp
 		$(CC) $(CFLAGS) -c bibleajax.cpp
