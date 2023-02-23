@@ -55,5 +55,6 @@ class Bible {	// A class to represent a version of the bible
    Ref getRef(int i);
    // Return particular offset in index
    int getOffset(int i);
+   int getOffset(Ref i);
 };
 #endif //Bible_H

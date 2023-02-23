@@ -169,3 +169,13 @@ int Bible::getOffset(int index) {
 		return 0;
 	return it->second;
 }
+
+int Bible::getOffset(Ref ref) {
+  map<Ref, int>::iterator it;  // iterator for find
+  it = refIndex.find(ref);
+  if (it == refIndex.end()) {
+      return -1;
+  } else {
+      return it->second;
+  }
+}
