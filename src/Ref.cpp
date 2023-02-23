@@ -71,16 +71,16 @@ int Ref::getChap() const {return chap;}	 // Access chapter number
 int Ref::getVerse() const {return verse;}; // Access verse number
 
 // Comparison functions
-bool Ref::operator==(const Ref r) {
+bool Ref::operator==(const Ref r) const {
   return book == r.getBook() && chap == r.getChap() && verse == r.getVerse();
 }
-bool Ref::operator<(const Ref r) {
+bool Ref::operator<(const Ref r) const {
   const bool isBeforeBook = book < r.getBook();
   const bool isBeforeChapter = isBeforeBook ? true : book == r.getBook() && chap < r.getChap();
   const bool isBeforeVerse = isBeforeChapter ? true : book == r.getBook() && chap == r.getChap() && verse < r.getVerse();
   return isBeforeVerse;
 }
-bool Ref::operator<=(const Ref r) {
+bool Ref::operator<=(const Ref r) const {
   return *this < r || *this == r;
 }
 

@@ -47,9 +47,9 @@ public:
    int getChap() const;	// Access chapter number
    int getVerse() const;	// Access verse number
 
-   bool operator==(const Ref);
-   bool operator<(const Ref);
-   bool operator<=(const Ref);
+   bool operator==(const Ref) const;
+   bool operator<(const Ref) const;
+   bool operator<=(const Ref) const;
 
    void display(); // Print reference with basic formatting
    void displayFlowing(); // Print reference in flowing format
