@@ -132,12 +132,10 @@ int Bible::buildTextIndex () {
 		/* Get the file position at beginning of line */
 		position = instream.tellg();
 		/* get the next line */
-		getline(instream,line);
-
-		Ref ref = Ref(line);
-		Verse verse = Verse(line);
-
-		refIndex[ref] = position;
+		if (getline(instream,line)) {
+			Ref ref = Ref(line);
+			refIndex[ref] = position;
+		}
 	}
   return 1;  /* true, indicates success */
 }
