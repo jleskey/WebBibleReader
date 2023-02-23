@@ -1,4 +1,7 @@
 # VS Code
-
 .vscode
 *.code-workspace
+
+# Build artifacts
+*.o
+testreader
