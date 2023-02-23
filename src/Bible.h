@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 #include <stdio.h>
 #include <stdlib.h>
 using namespace std;
@@ -29,6 +30,7 @@ class Bible {	// A class to represent a version of the bible
    Ref lastValidRef; // last valid reference in reading operation
    Ref currentRef; // current reference in reading operation
    Ref targetRef; // given point of reference
+   map<Ref, int> refIndex;
 
  public:
    Bible();	// Default constructor
@@ -45,9 +47,13 @@ class Bible {	// A class to represent a version of the bible
    // Show the name of the bible file on cout
    void display();
    
-   // OPTIONAL: Return the reference after the given parameter ref
-   //Ref next(const Ref ref, LookupResult& status);
-   // OPTIONAL: Return the reference before the given parameter ref
-   //Ref prev(const Ref ref, LookupResult& status);
+   // Generate index of Bible references
+   int buildTextIndex();
+   // Return number of References
+   int getRefCount() { return refIndex.size(); }
+   // Return particular reference in index
+   Ref getRef(int i);
+   // Return particular offset in index
+   int getOffset(int i);
 };
 #endif //Bible_H

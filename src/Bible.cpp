@@ -14,10 +14,14 @@ using namespace std;
 
 Bible::Bible() { // Default constructor
 	infile = "/home/class/csc3004/Bibles/web-complete";
+	buildTextIndex();
 }
 
 // Constructor – pass bible filename
-Bible::Bible(const string s) { infile = s; }
+Bible::Bible(const string s) {
+	infile = s;
+	buildTextIndex();
+}
 
 // lookup finds a given verse in this Bible
 Verse Bible::lookup(Ref ref, LookupResult& status) { 
@@ -110,10 +114,58 @@ string Bible::error(LookupResult status) {
 void Bible::display() {
 	cout << "Bible file: " << infile << endl;
 }
-	
-// OPTIONAL access functions
-// OPTIONAL: Return the reference after the given ref
-//Ref Bible::next(const Ref ref, LookupResult& status) {}
 
-// OPTIONAL: Return the reference before the given ref
-//Ref Bible::prev(const Ref ref, LookupResult& status) {}
+int Bible::buildTextIndex () {
+	ifstream  instream;     /* input file descriptor */
+	int position;         /* location of line in the file */
+	string text, line, word;
+
+	/* open text file */
+	instream.open(infile.c_str(), ios::in);
+	if (!instream) {
+		cerr << "Error - can't open input file: " << infile << endl;
+		return 0;  /* false, indicates error */
+	}
+
+	/* process text file */
+	while (!instream.fail()) {
+		/* Get the file position at beginning of line */
+		position = instream.tellg();
+		/* get the next line */
+		getline(instream,line);
+
+		Ref ref = Ref(line);
+		Verse verse = Verse(line);
+
+		refIndex[ref] = position;
+	}
+  return 1;  /* true, indicates success */
+}
+
+Ref Bible::getRef(int index) {
+	map<Ref, int>::iterator it;
+	int i = 0;
+	if (index < 0 && index > -getRefCount())
+		for (it = refIndex.end(); index > i; it--)
+			i--;
+	else if (index < getRefCount())
+		for (it = refIndex.begin(); i < index; it++)
+			i++;
+	else
+		return Ref();
+	return it->first;
+}
+
+int Bible::getOffset(int index) {
+	map<Ref, int>::iterator it;
+	int i = 0;
+	if (index < 0 && index > -getRefCount())
+		for (it = refIndex.end(); index > i; it--)
+			i--;
+	else if (index < getRefCount())
+		for (it = refIndex.begin(); i < index; it++)
+			i++;
+	else
+		return 0;
+	return it->second;
+}
