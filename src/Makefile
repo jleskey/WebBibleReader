@@ -17,7 +17,7 @@ USER= josleskey
 CC= g++
 CFLAGS= -g -std=c++11
 
-all:	bibleajax.cgi# PutCGI PutStatic
+all:	bibleajax.cgi testreader# PutCGI PutStatic
 
 # Ref Object
 Ref.o : Ref.h Ref.cpp
@@ -36,11 +36,11 @@ bibleajax.cgi:	Ref.o Verse.o Bible.o bibleajax.o
 		# -l option is necessary to link with cgicc library
 
 # auxillary program to test reference index
-testreader.o: Ref.o Verse.o Bible.of
+testreader.o: Ref.o Verse.o Bible.o
 	$(CC) $(CFLAGS) -c testreader.cpp
 
 testreader: testreader.o
-	$(CC) $(CFLAGS) -o testreader testreader.o
+	$(CC) $(CFLAGS) -o testreader testreader.o Ref.o Verse.o Bible.o
 
 # main program to handle AJAX/CGI requests for Bible references
 bibleajax.o:	bibleajax.cpp
