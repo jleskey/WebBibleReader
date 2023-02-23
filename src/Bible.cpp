@@ -160,7 +160,7 @@ int Bible::getOffset(int index) {
 	map<Ref, int>::iterator it;
 	int i = 0;
 	if (index < 0 && index > -getRefCount())
-		for (it = refIndex.end(); index > i; it--)
+		for (it = refIndex.end(); i > index; it--)
 			i--;
 	else if (index < getRefCount())
 		for (it = refIndex.begin(); i < index; it++)
