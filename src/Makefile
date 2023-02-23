@@ -36,7 +36,7 @@ bibleajax.cgi:	Ref.o Verse.o Bible.o bibleajax.o
 		# -l option is necessary to link with cgicc library
 
 # auxillary program to test reference index
-testreader.o: Ref.o Verse.o Bible.o
+testreader.o: Ref.o Verse.o Bible.o testreader.cpp
 	$(CC) $(CFLAGS) -c testreader.cpp
 
 testreader: testreader.o
