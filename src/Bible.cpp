@@ -29,29 +29,19 @@ Verse Bible::lookup(Ref ref, LookupResult& status) {
     // update the status variable
 
 	status = OTHER;
-	Verse lastValidVerse, currentVerse;
 
-	targetRef = ref;
-	do {
-		currentVerse = nextVerse(status);
-		currentRef = currentVerse.getRef();
-		if (currentRef <= ref && status == SUCCESS) {
-			lastValidVerse = currentVerse;
-			lastValidRef = currentRef;
-		}
-	} while (lastValidRef < ref && status == SUCCESS);
+  int offset = getOffsetOfRef(ref);
+  instream.seekg(offset, ios::beg);
 
-	if (ref.getBook() == 0 || lastValidRef.getBook() < ref.getBook() && (ref.getChap() != 0 || ref.getVerse() != 0))
-		status = NO_BOOK;
-	else if (ref.getChap() == 0 || lastValidRef.getBook() == ref.getBook() && lastValidRef.getChap() < ref.getChap() && ref.getVerse() != 0)
-		status = NO_CHAPTER;
-	else if (ref.getVerse() == 0 || lastValidRef.getBook() == ref.getBook() && lastValidRef.getChap() == ref.getChap() && lastValidRef.getVerse() < ref.getVerse())
-		status = NO_VERSE;
+	Verse verse = nextVerse(status);
 
-    return(lastValidVerse);
+  if (status == REACHED_END) {
+    checkRef(ref, status);
+    return Verse();
+  }
+
+  return verse;
 }
-
-
 
 // Return the next verse from the Bible file stream if the file is open.
 // If the file is not open, open the file and return the first verse.
@@ -140,6 +130,28 @@ int Bible::buildTextIndex () {
   return 1;  /* true, indicates success */
 }
 
+void Bible::checkRef(Ref ref, LookupResult &status) {
+  int b = ref.getBook(),
+      c = ref.getChap(),
+      v = ref.getVerse();
+  Ref verseRef = Ref(b, c, v);
+  Ref chapRef = Ref(b, c, 1);
+  Ref bookRef = Ref(b, 1, 1);
+
+  if (refExists(verseRef))
+    status = SUCCESS;
+  else if (refExists(chapRef))
+    status = NO_VERSE;
+  else if (refExists(bookRef))
+    status = NO_CHAPTER;
+  else
+    status = NO_BOOK;
+}
+
+bool Bible::refExists(Ref ref) {
+  return getOffsetOfRef(ref) != -1;
+}
+
 Ref Bible::getRef(int index) {
 	map<Ref, int>::iterator it;
 	int i = 0;
@@ -154,7 +166,7 @@ Ref Bible::getRef(int index) {
 	return it->first;
 }
 
-int Bible::getOffset(int index) {
+int Bible::getOffsetByIndex(int index) {
 	map<Ref, int>::iterator it;
 	int i = 0;
 	if (index < 0 && index > -getRefCount())
@@ -168,7 +180,7 @@ int Bible::getOffset(int index) {
 	return it->second;
 }
 
-int Bible::getOffset(Ref ref) {
+int Bible::getOffsetOfRef(Ref ref) {
   map<Ref, int>::iterator it;  // iterator for find
   it = refIndex.find(ref);
   if (it == refIndex.end()) {
@@ -176,4 +188,32 @@ int Bible::getOffset(Ref ref) {
   } else {
       return it->second;
   }
+}
+
+Ref Bible::prev(const Ref ref, LookupResult& status) {
+	map<Ref, int>::iterator it;  // iterator for find
+	it = refIndex.find(ref);
+	if (it == refIndex.end()) {
+		return Ref();
+	} else {
+		it--;
+		if (it == refIndex.begin())
+			return Ref();
+		else
+			return it->first;
+	}
+}
+
+Ref Bible::next(const Ref ref, LookupResult& status) {
+	map<Ref, int>::iterator it;  // iterator for find
+	it = refIndex.find(ref);
+	if (it == refIndex.end()) {
+		return Ref();
+	} else {
+		it++;
+		if (it == refIndex.end())
+			return Ref();
+		else
+			return it->first;
+	}
 }
