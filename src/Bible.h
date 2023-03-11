@@ -77,7 +77,7 @@ public:
   int getOffsetOfRef(Ref i);
 
   // Return the reference before/after the given parameter ref
-   Ref next(const Ref ref, LookupResult& status);
-   Ref prev(const Ref ref, LookupResult& status);
+  Ref next(const Ref ref, LookupResult &status);
+  Ref prev(const Ref ref, LookupResult &status);
 };
 #endif // Bible_H
