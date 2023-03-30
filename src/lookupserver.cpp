@@ -34,15 +34,19 @@ int main()
   Fifo recfifo(receive_pipe);
   Fifo sendfifo(send_pipe);
 
-  cout << endl << flush;
-
   while (true) {
     recfifo.openread();
     string refQuery = recfifo.recv();
     recfifo.fifoclose();
-    cout << "Received request: " << refQuery << endl << flush;
+
+    string reply = refQuery + " [verse text]";
+
+    cout << "Server received request: " << refQuery << endl << flush;
+
     sendfifo.openwrite();
-    sendfifo.send(refQuery + " [verse text]");
+    sendfifo.send(reply);
     sendfifo.fifoclose();
+
+    cout << "Client received response: " << reply << endl << flush;
   }
 }
