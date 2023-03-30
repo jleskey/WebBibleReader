@@ -17,7 +17,7 @@ USER= josleskey
 CC= g++
 CFLAGS= -g -std=c++11
 
-all:	testreader# bibleajax.cgi PutCGI PutStatic
+all:	lookupserver# bibleajax.cgi PutCGI PutStatic
 
 # Ref Object
 Ref.o : Ref.h Ref.cpp
@@ -31,16 +31,19 @@ Verse.o : Ref.h Verse.h Verse.cpp
 Bible.o : Ref.h Verse.h Bible.h Bible.cpp
 	$(CC) $(CFLAGS) -c Bible.cpp
 
+# Pipe mechanism
+fifo.o: fifo.cpp fifo.h
+	g++ -c fifo.cpp
+
 bibleajax.cgi:	Ref.o Verse.o Bible.o bibleajax.o
 		$(CC) $(CFLAGS) -o bibleajax.cgi Ref.o Verse.o Bible.o bibleajax.o -lcgicc
 		# -l option is necessary to link with cgicc library
 
 # auxillary program to test reference index
-testreader.o: Ref.h Verse.h Bible.h testreader.cpp
-	$(CC) $(CFLAGS) -c testreader.cpp
-
-testreader: Ref.o Verse.o Bible.o testreader.o
-	$(CC) $(CFLAGS) -o testreader testreader.o Ref.o Verse.o Bible.o
+lookupserver.o: lookupserver.cpp Ref.h Verse.h Bible.h fifo.h
+	$(CC) $(CFLAGS) -c lookupserver.cpp
+lookupserver: lookupserver.o Ref.o Verse.o Bible.o fifo.o
+	$(CC) $(CFLAGS) -o lookupserver lookupserver.o Ref.o Verse.o Bible.o fifo.o
 
 # main program to handle AJAX/CGI requests for Bible references
 bibleajax.o:	bibleajax.cpp
@@ -60,4 +63,4 @@ PutStatic:
 		ls -l /var/www/html/class/csc3004/$(USER)
 
 clean:		
-		rm *.o core bibleajax.cgi
+		rm *.o lookupserver
