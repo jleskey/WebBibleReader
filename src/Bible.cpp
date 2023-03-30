@@ -39,12 +39,17 @@ Verse Bible::lookup(Ref ref, LookupResult &status)
 
   status = OTHER;
 
-  int offset = getOffsetOfRef(ref);
-  instream.seekg(offset, ios::beg);
+  Verse verse;
 
-  Verse verse = nextVerse(status);
+  if (loadFile()) {
+    int offset = getOffsetOfRef(ref);
+    instream.seekg(offset, ios::beg);
+    verse = nextVerse(status);
+  } else {
+    status = FILE_ERROR;
+  }
 
-  if (status == REACHED_END)
+  if (status == FILE_ERROR || status == REACHED_END)
   {
     checkRef(ref, status);
     return Verse();
@@ -59,21 +64,10 @@ Verse Bible::nextVerse(LookupResult &status)
 {
   string verseData = "";
 
-  if (!instream.is_open())
-    instream.open(infile.c_str(), ios::in);
-
-  instream.unsetf(ios::skipws);
-
-  if (instream.fail())
-  {
+  if (!loadFile())
     status = FILE_ERROR;
-    instream.close();
-  }
-  else if (!getline(instream, verseData))
-  {
+  if (!getline(instream, verseData))
     status = REACHED_END;
-    instream.close();
-  }
   else
     status = SUCCESS;
 
@@ -255,4 +249,25 @@ Ref Bible::next(const Ref ref, LookupResult &status)
     else
       return it->first;
   }
+}
+
+bool Bible::loadFile()
+{
+  if (!instream.is_open())
+    instream.open(infile.c_str(), ios::in);
+  else
+    instream.clear();
+
+  instream.unsetf(ios::skipws);
+
+  if (instream.fail())
+    return false;
+  return true;
+}
+
+bool Bible::closeFile()
+{
+  if (!instream.is_open())
+    instream.close();
+  return true;
 }

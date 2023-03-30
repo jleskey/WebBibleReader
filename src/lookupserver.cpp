@@ -5,12 +5,13 @@
 #include "Bible.h"
 #include "fifo.h"
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <stdio.h>
 
 using namespace std;
 
-// Create Bible object to process the raw text file
+string buildResponse(Bible &bible, Ref ref);
 
 const string receive_pipe  = "WBrequest";
 const string send_pipe = "WBreply";
@@ -42,8 +43,11 @@ int main()
     recfifo.fifoclose();
 
     // reply placeholder
-    string reply = "status=OTHER&body=" + refQuery.substr(refQuery.find("reference=") + 10) + " [verse text]";
+    //string reply = "status=OTHER&body=" + refQuery.substr(refQuery.find("reference=") + 10) + " [verse text]";
 
+    Ref ref(refQuery.substr(refQuery.find("reference=") + 10));
+    string reply = "status=OTHER&body=" + buildResponse(webBible, ref);
+    
     cout << "Server received request: " << refQuery << endl << flush;
 
     sendfifo.openwrite();
@@ -52,4 +56,27 @@ int main()
 
     cout << "Client received response: " << reply << endl << flush;
   }
+}
+
+string buildResponse(Bible &bible, Ref ref)
+{
+  LookupResult result;
+  Verse verse;
+
+  ostringstream out;
+
+  verse = bible.lookup(ref, result);
+
+  if (result == SUCCESS)
+  {
+    out << GetBookName(ref.getBook()) << " " << ref.getChap() << ":" << ref.getVerse() << " " << verse.getVerse();
+    out << endl;
+  }
+  else if (result != REACHED_END)
+  {
+    out << bible.error(result) << endl;
+    exit(2);
+  }
+
+  return out.str();
 }

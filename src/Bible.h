@@ -42,6 +42,9 @@ private:
   Ref targetRef;     // given point of reference
   map<Ref, int> refIndex;
 
+  bool loadFile();
+  bool closeFile();
+
 public:
   Bible(LookupResult &status);                 // Default constructor
   Bible(const string s, LookupResult &status); // Constructor – pass name of bible file
