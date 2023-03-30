@@ -41,7 +41,8 @@ int main()
     string refQuery = recfifo.recv();
     recfifo.fifoclose();
 
-    string reply = refQuery + " [verse text]";
+    // reply placeholder
+    string reply = "status=OTHER&body=" + refQuery.substr(refQuery.find("reference=") + 10) + " [verse text]";
 
     cout << "Server received request: " << refQuery << endl << flush;
 
