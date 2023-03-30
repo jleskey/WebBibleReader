@@ -34,6 +34,8 @@ int main()
   Fifo recfifo(receive_pipe);
   Fifo sendfifo(send_pipe);
 
+  cout << endl;
+
   while (true) {
     recfifo.openread();
     string refQuery = recfifo.recv();
