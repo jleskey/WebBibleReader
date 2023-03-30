@@ -43,8 +43,8 @@ private:
   map<Ref, int> refIndex;
 
 public:
-  Bible();               // Default constructor
-  Bible(const string s); // Constructor – pass name of bible file
+  Bible(LookupResult &status);                 // Default constructor
+  Bible(const string s, LookupResult &status); // Constructor – pass name of bible file
 
   // Find and return a verse in this Bible, given a reference
   Verse lookup(const Ref ref, LookupResult &status);

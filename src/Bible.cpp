@@ -12,17 +12,23 @@
 #include <stdlib.h>
 using namespace std;
 
-Bible::Bible()
+Bible::Bible(LookupResult &status)
 { // Default constructor
   infile = "/home/class/csc3004/Bibles/web-complete";
-  buildTextIndex();
+  if (buildTextIndex() == 1)
+    status = SUCCESS;
+  else
+    status = FILE_ERROR;
 }
 
 // Constructor – pass bible filename
-Bible::Bible(const string s)
+Bible::Bible(const string s, LookupResult &status)
 {
   infile = s;
-  buildTextIndex();
+  if (buildTextIndex() == 1)
+    status = SUCCESS;
+  else
+    status = FILE_ERROR;
 }
 
 // lookup finds a given verse in this Bible
