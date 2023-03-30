@@ -22,7 +22,7 @@ int main()
   Bible webBible("/home/class/csc3004/Bibles/web-complete", result);
 
   if (result == FILE_ERROR)
-    return;
+    return 1;
 
   cout << "Indexing complete." << endl
        << "References: " << webBible.getRefCount() << endl
