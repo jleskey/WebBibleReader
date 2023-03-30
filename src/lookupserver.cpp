@@ -24,19 +24,23 @@ int main()
   if (result == FILE_ERROR)
     return 1;
 
-  cout << "Indexing complete." << endl
-       << "References: " << webBible.getRefCount() << endl
-       << "Last byte offset: " << webBible.getOffsetByIndex(-1) << endl;
+  cout << endl
+       << "               Completed indexing." << endl
+       << "=================================================" << endl
+       << "References: " << webBible.getRefCount()
+       << "\tLast byte offset: " << webBible.getOffsetByIndex(-1) << endl << endl;
 
   // Connect pipes
   Fifo recfifo(receive_pipe);
   Fifo sendfifo(send_pipe);
 
-  recfifo.openread();
+  cout << endl << flush;
 
   while (true) {
+    recfifo.openread();
     string refQuery = recfifo.recv();
-    cout << "Received request: " << refQuery;
+    recfifo.fifoclose();
+    cout << "Received request: " << refQuery << endl << flush;
     sendfifo.openwrite();
     sendfifo.send(refQuery + " [verse text]");
     sendfifo.fifoclose();
