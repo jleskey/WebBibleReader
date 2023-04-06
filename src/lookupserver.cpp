@@ -11,6 +11,10 @@
 
 using namespace std;
 
+#define logging
+#define LOG_FILENAME "/home/class/csc3004/tmp/josleskey-WebBibleReader.log"
+#include "logfile.h"
+
 string buildResponse(Bible &bible, Ref ref);
 
 const string receive_pipe  = "WBrequest";
@@ -19,6 +23,10 @@ const string send_pipe = "WBreply";
 int main()
 {
   LookupResult result;
+
+  #ifdef logging
+    logFile.open(LOG_FILENAME, ios::out);
+  #endif
 
   Bible webBible("/home/class/csc3004/Bibles/web-complete", result);
 
