@@ -17,16 +17,16 @@ using namespace std;
 
 string buildResponse(Bible &bible, Ref ref);
 
-const string receive_pipe  = "WBrequest";
+const string receive_pipe = "WBrequest";
 const string send_pipe = "WBreply";
 
 int main()
 {
   LookupResult result;
 
-  #ifdef logging
-    logFile.open(LOG_FILENAME, ios::out);
-  #endif
+#ifdef logging
+  logFile.open(LOG_FILENAME, ios::out);
+#endif
 
   Bible webBible("/home/class/csc3004/Bibles/web-complete", result);
 
@@ -37,7 +37,8 @@ int main()
        << "               Completed indexing." << endl
        << "=================================================" << endl
        << "References: " << webBible.getRefCount()
-       << "\tLast byte offset: " << webBible.getOffsetByIndex(-1) << endl << endl;
+       << "\tLast byte offset: " << webBible.getOffsetByIndex(-1) << endl
+       << endl;
 
   // Connect pipes
   Fifo recfifo(receive_pipe);
@@ -45,24 +46,24 @@ int main()
 
   cout << endl;
 
-  while (true) {
+  while (true)
+  {
     recfifo.openread();
     string refQuery = recfifo.recv();
     recfifo.fifoclose();
 
-    // reply placeholder
-    //string reply = "status=OTHER&body=" + refQuery.substr(refQuery.find("reference=") + 10) + " [verse text]";
-
     Ref ref(refQuery.substr(refQuery.find("reference=") + 10));
     string reply = "status=OTHER&body=" + buildResponse(webBible, ref);
-    
-    cout << "Server received request: " << refQuery << endl << flush;
+
+    cout << "Server received request: " << refQuery << endl
+         << flush;
 
     sendfifo.openwrite();
     sendfifo.send(reply);
     sendfifo.fifoclose();
 
-    cout << "Client received response: " << reply << endl << flush;
+    cout << "Client received response: " << reply << endl
+         << flush;
   }
 }
 

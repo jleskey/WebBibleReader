@@ -42,11 +42,14 @@ Verse Bible::lookup(Ref ref, LookupResult &status)
 
   Verse verse;
 
-  if (loadFile()) {
+  if (loadFile())
+  {
     int offset = getOffsetOfRef(ref);
     instream.seekg(offset, ios::beg);
     verse = nextVerse(status);
-  } else {
+  }
+  else
+  {
     status = FILE_ERROR;
   }
 
