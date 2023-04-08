@@ -32,8 +32,10 @@ string GetNextToken(string &str, const string &delimiters = " ")
 // Returns: string name
 string GetBookName(int n)
 {
-  if (n < 1 || n > 66)
+  if (n < 1 || n > 66) {
     cerr << "Error: no match for out of bounds Bible book " << n << "." << endl;
+    return "invalid book";
+  }
   return bookNames[n - 1];
 }
 
@@ -103,6 +105,11 @@ bool Ref::operator<=(const Ref r) const
 }
 
 // Display functions
+
+string Ref::toString()
+{ // Return reference as string
+  return to_string(book) + ":" + to_string(chap) + ":" + to_string(verse);
+}
 
 void Ref::display()
 { // Display reference with basic formatting

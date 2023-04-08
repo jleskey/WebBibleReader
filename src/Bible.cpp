@@ -45,8 +45,12 @@ Verse Bible::lookup(Ref ref, LookupResult &status)
   if (loadFile())
   {
     int offset = getOffsetOfRef(ref);
-    instream.seekg(offset, ios::beg);
-    verse = nextVerse(status);
+    if (offset < 0) {
+      status = REACHED_END;
+    } else {
+      instream.seekg(offset, ios::beg);
+      verse = nextVerse(status);
+    }
   }
   else
   {

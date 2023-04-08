@@ -28,7 +28,13 @@ string timestamp() {
   return t;
 }
 
-#define log(message) logFile << timestamp() << ": " << message << endl
+#ifdef SYSTEM_NAME
+  #define systemNote "[" SYSTEM_NAME "] "
+#else
+  #define systemNote ""
+#endif
+
+#define log(message) logFile << timestamp() << ": " << systemNote << message << endl
 #else
 #define log(message)
 #endif // logging

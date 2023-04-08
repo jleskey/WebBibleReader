@@ -127,7 +127,7 @@ bool evaluateStringInput(form_iterator input, string &targetVar)
 Bible connectBible(string version)
 {
   string path = "/home/class/csc3004/Bibles/";
-  if (version == "kjv" || version == "dby" || version == "vlt" || version == "webster")
+  if (version == "kjv" || version == "dby" || version == "ylt" || version == "webster")
     path.append(version);
   else
     path.append("web");

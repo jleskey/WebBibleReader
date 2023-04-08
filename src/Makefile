@@ -1,4 +1,4 @@
-# Bibleajax program
+# lookupclient program
 # Bob Kasper, MVNU Computer Science
 # updated January 2020 to use
 # c++11 compiler option, current paths on cs.mvnu.edu
@@ -9,7 +9,7 @@
 # Then use "make" to build the server program,
 # and deploy it to the live web server directory.
 # To test the program, go to http://cs.mvnu.edu/class/csc3004/USER/
-# and open the bibleajax.html link.
+# and open the lookupclient.html link.
 
 USER= josleskey
 
@@ -17,7 +17,7 @@ USER= josleskey
 CC= g++
 CFLAGS= -g -std=c++11
 
-all:	lookupserver# bibleajax.cgi PutCGI PutStatic
+all:	lookupserver lookupclient.cgi PutCGI PutStatic
 
 # Ref Object
 Ref.o : Ref.h Ref.cpp
@@ -32,32 +32,30 @@ Bible.o : Ref.h Verse.h Bible.h Bible.cpp
 	$(CC) $(CFLAGS) -c Bible.cpp
 
 # Pipe mechanism
-fifo.o: fifo.cpp fifo.h
-	g++ -c fifo.cpp
+fifo.o: fifo.cpp fifo.h logfile.h
+	$(CC) $(CFLAGS) -c fifo.cpp
 
-bibleajax.cgi:	Ref.o Verse.o Bible.o bibleajax.o
-		$(CC) $(CFLAGS) -o bibleajax.cgi Ref.o Verse.o Bible.o bibleajax.o -lcgicc
-		# -l option is necessary to link with cgicc library
-
-# auxillary program to test reference index
-lookupserver.o: lookupserver.cpp Ref.h Verse.h Bible.h fifo.h
+# Lookup server
+lookupserver.o: lookupserver.cpp fifo.h Ref.h Verse.h Bible.h logfile.h
 	$(CC) $(CFLAGS) -c lookupserver.cpp
 lookupserver: lookupserver.o Ref.o Verse.o Bible.o fifo.o
 	$(CC) $(CFLAGS) -o lookupserver lookupserver.o Ref.o Verse.o Bible.o fifo.o
 
-# main program to handle AJAX/CGI requests for Bible references
-bibleajax.o:	bibleajax.cpp
-		$(CC) $(CFLAGS) -c bibleajax.cpp
+# Lookup client
+lookupclient.o: lookupclient.cpp fifo.h logfile.h Verse.h Bible.h
+	$(CC) $(CFLAGS) -c lookupclient.cpp
+lookupclient.cgi:	lookupclient.o fifo.o Ref.o Verse.o Bible.h
+		$(CC) $(CFLAGS) -o lookupclient.cgi lookupclient.o fifo.o Ref.o Verse.o Bible.o -lcgicc
 			
-PutCGI:	bibleajax.cgi
-		chmod 755 bibleajax.cgi
-		cp bibleajax.cgi /var/www/html/class/csc3004/$(USER)/cgi-bin
+PutCGI:	lookupclient.cgi
+		chmod 755 lookupclient.cgi
+		cp lookupclient.cgi /var/www/html/class/csc3004/$(USER)/cgi-bin
 
 		echo "Current contents of your cgi-bin directory: "
 		ls -l /var/www/html/class/csc3004/$(USER)/cgi-bin/
 
 PutStatic:
-		cp bibleajax.html bibleajax.css /var/www/html/class/csc3004/$(USER)
+		cp bibleindexproj3.html bibleindex.css /var/www/html/class/csc3004/$(USER)
 
 		echo "Current contents of your HTML directory: "
 		ls -l /var/www/html/class/csc3004/$(USER)

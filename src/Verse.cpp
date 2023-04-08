@@ -34,6 +34,11 @@ Ref Verse::getRef()
   return verseRef;
 }
 
+string Verse::toString()
+{
+  return verseRef.toString() + " " + verseText;
+}
+
 // display reference and verse quite simply
 void Verse::display()
 {

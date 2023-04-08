@@ -27,6 +27,7 @@ public:
   string getVerse();
 
   // Display functions
+  string toString();                       // Return primative reference and verse string
   void display();                          // Display ref & verse [with line breaks in needed].
   void displayFlowing(bool startsPassage); // Display ref & verse, formatted for flowing passages.
   void displayFullInline();                // Display full ref & verse inline

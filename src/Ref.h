@@ -54,6 +54,7 @@ public:
   bool operator<=(const Ref) const;
 
   // Display methods
+  string toString();     // Return reference string
   void display();        // Print reference with basic formatting
   void displayFlowing(); // Print reference in flowing format
   void displayHeader();  // Display book name and chapter number

@@ -1,4 +1,4 @@
-<!-- bibleajax.html
+<!-- bibleindexproj3.html
  -- James Skon Feb 21, 2015
  -- Bob Kasper January 2020: corrected to check for missing search type,
  --     added comments
@@ -54,12 +54,12 @@
             return;
         }
         // NOTE: This page must be loaded from cs.mvnu.edu to avoid a cross-origin request violation.
-        XMLHttp.open("GET", "/class/csc3004/josleskey/cgi-bin/bibleajax.cgi?"
+        XMLHttp.open("GET", "/class/csc3004/josleskey/cgi-bin/lookupclient.cgi?"
             + "search_type=" + searchType.value
             + "&version=" + document.getElementById('version').value
-            + "&book=" + document.getElementById('book').value
-            + "&chapter=" + document.getElementById('chapter').value
-            + "&verse=" + document.getElementById('verse').value
+            + "&reference=" + document.getElementById('book').value
+            + ":" + document.getElementById('chapter').value
+            + ":" + document.getElementById('verse').value
             + "&num_verse=" + document.getElementById('num_verse').value,
             true); // true indicates asynchronous request
         XMLHttp.onreadystatechange = function () { // callback function

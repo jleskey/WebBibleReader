@@ -27,6 +27,7 @@ enum LookupResult
   NO_CHAPTER,
   NO_VERSE,
   FILE_ERROR,
+  IN_TRANSIT,
   REACHED_END,
   OTHER,
 };
